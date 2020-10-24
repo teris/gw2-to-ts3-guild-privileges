@@ -9,7 +9,7 @@ When all settings are made, set Debug to false
 
 For questions:
 github.support@teris-cooper.de
-
+Demo: https://ts3-admin.nerds.orga-consult.eu/
 ----------------------------------------
 
 # gw2-to-ts3-guild-privileges
@@ -23,3 +23,4 @@ Wenn alle Einstellungen vorgenommen wurden, setzen Sie Debug auf false
 
 Für Fragen:
 github.support@teris-cooper.de
+Demo: https://ts3-admin.nerds.orga-consult.eu/
