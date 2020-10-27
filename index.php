@@ -12,13 +12,11 @@
 <script type="text/javascript" src="formoid1/jquery.min.js"></script>
 
 <?php
-
-include_once("config.php");
-
-if(!$_GET['token']!= NULL):
-	$_GET['token'] = $gw_api_key;
+if(file_exists("config.php")):
+	include_once("config.php");
+else:
+	header("LOCATION: installer.php");
 endif;
-
 include "ts3admin.class.php";
 include('class.gw.php');
 
@@ -37,12 +35,10 @@ if(isset($_POST['absenden'])):
 
 	if($connect['success']):
 		//print_r($ts3->privilegekeyList());
-		foreach($acc_info['guilds'] as $gilden):
-			if($gilden == $gw_gilden_id):
-				$tokenMyOk = $ts3->privilegekeyAdd($tokentype,$token_1,'0'); 
+			if(array_search($acc_info['guilds'], $gw_gilden_id) !== false):
+				$tokenMyOk = $ts3->privilegekeyAdd($tokentype,$token_1,'0',"Vom TS3 PHP Bot"); 
 				$ok = 1;
 			endif;
-		endforeach;
 		?>
 		<form class="formoid-biz-blue" style="background-color:#1A2223;color:#ECECEC;max-width:480px;min-width:150px">
 			<div class="title"><h2>TS3 Berechtigung</h2></div>
@@ -53,7 +49,7 @@ if(isset($_POST['absenden'])):
 					echo "Dein TS3-Schlüssel: <input class='large' type='text' value='".$tokenMyOk['data']['token']."' />";
 					echo "<br><br>Server-Adresse: <a href='ts3server://'".$ts3_ip."'>".$ts3_ip."</a><br>";
 				else:
-					$tokenMyNo = $ts3->privilegekeyAdd($tokentype,$token_2,'0'); 
+					$tokenMyNo = $ts3->privilegekeyAdd($tokentype,$token_2,'0',"Vom TS3 PHP Bot"); 
 					echo "<br>Es tut mir leid, aber du bekommst nur eingeschränkten Zugriff!<br><br>";
 					echo "Dein TS3-Schlüssel: <input class='large' type='text' value='".$tokenMyNo['data']['token']."' />";
 					echo "<br><br>TS3Server-Adresse: <a href='ts3server://'".$ts3_ip."'>".$ts3_ip."</a><br>";
@@ -92,10 +88,11 @@ endif;
 
 if($debug == true):
 	echo "<pre>";
-	
 	echo "Benutze die eine der IDs für die Einstellung in der Config.php um die Entsprechende ServerGruppe fest zu legen.<br>";
-	foreach($ts3->serverGroupList("0")['data'] as $key => $value):
-		echo "ServerGruppe: ".$value['name']." - ID:" . $value['sgid'] ."<br>";
+	foreach($ts3->serverGroupList()['data'] as $key => $value):
+		if($value['type'] == 1):
+			echo "ServerGruppe: ".$value['name']." - ID:" . $value['sgid'] ."<br>";
+		endif;
 	endforeach;
 	
 	echo "<hr>";
